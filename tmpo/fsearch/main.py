@@ -76,7 +76,7 @@ async def search_files(request):
         try:
             line = await process.stdout.readline()
         except ValueError:
-            line = await process.stdout.read()
+            pass
 
         if line:
             if not result:

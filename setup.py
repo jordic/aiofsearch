@@ -9,7 +9,7 @@ readme = open('README.md').read() + '\n'
 
 setup(
     name='aiofilesearch',
-    version="0.9",
+    version="0.9.2",
     description='WS Demo for file search',
     long_description=readme,
     author='Jordi Collell',
@@ -20,7 +20,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
-        'Topic :: Software Development :: Libraries :: Python Modules'
+        'Environment :: Web Environment'
     ],
     url='https://github.com/jordic/aiofsearch',
     license='BSD',
