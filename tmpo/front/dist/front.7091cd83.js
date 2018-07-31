@@ -1160,7 +1160,80 @@ function linkState(component, key, eventPath) {
 
 exports.default = linkState;
 //# sourceMappingURL=linkstate.es.js.map
-},{}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{}],"node_modules/preact-virtual-list/dist/preact-virtual-list.js":[function(require,module,exports) {
+var define;
+var global = arguments[3];
+!function(global, factory) {
+    "object" == typeof exports && "undefined" != typeof module ? module.exports = factory(require("preact")) : "function" == typeof define && define.amd ? define([ "preact" ], factory) : global.VirtualList = factory(global.preact);
+}(this, function(preact) {
+    "use strict";
+    var babelHelpers = {};
+    babelHelpers.classCallCheck = function(instance, Constructor) {
+        if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
+    }, babelHelpers["extends"] = Object.assign || function(target) {
+        for (var i = 1; i < arguments.length; i++) {
+            var source = arguments[i];
+            for (var key in source) Object.prototype.hasOwnProperty.call(source, key) && (target[key] = source[key]);
+        }
+        return target;
+    }, babelHelpers.inherits = function(subClass, superClass) {
+        if ("function" != typeof superClass && null !== superClass) throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+        subClass.prototype = Object.create(superClass && superClass.prototype, {
+            constructor: {
+                value: subClass,
+                enumerable: !1,
+                writable: !0,
+                configurable: !0
+            }
+        }), superClass && (Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass);
+    }, babelHelpers.objectWithoutProperties = function(obj, keys) {
+        var target = {};
+        for (var i in obj) keys.indexOf(i) >= 0 || Object.prototype.hasOwnProperty.call(obj, i) && (target[i] = obj[i]);
+        return target;
+    }, babelHelpers.possibleConstructorReturn = function(self, call) {
+        if (!self) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+        return !call || "object" != typeof call && "function" != typeof call ? self : call;
+    };
+    var STYLE_INNER = "position:relative; overflow:hidden; width:100%; min-height:100%;", STYLE_CONTENT = "position:absolute; top:0; left:0; height:100%; width:100%; overflow:visible;", VirtualList = function(_Component) {
+        function VirtualList() {
+            var _temp, _this, _ret;
+            babelHelpers.classCallCheck(this, VirtualList);
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _len > _key; _key++) args[_key] = arguments[_key];
+            return _temp = _this = babelHelpers.possibleConstructorReturn(this, _Component.call.apply(_Component, [ this ].concat(args))), 
+            _this.resize = function() {
+                _this.state.height !== _this.base.offsetHeight && _this.setState({
+                    height: _this.base.offsetHeight
+                });
+            }, _this.handleScroll = function() {
+                _this.setState({
+                    offset: _this.base.scrollTop
+                }), _this.props.sync && _this.forceUpdate();
+            }, _ret = _temp, babelHelpers.possibleConstructorReturn(_this, _ret);
+        }
+        return babelHelpers.inherits(VirtualList, _Component), VirtualList.prototype.componentDidUpdate = function() {
+            this.resize();
+        }, VirtualList.prototype.componentDidMount = function() {
+            this.resize(), addEventListener("resize", this.resize);
+        }, VirtualList.prototype.componentWillUnmount = function() {
+            removeEventListener("resize", this.resize);
+        }, VirtualList.prototype.render = function(_ref, _ref2) {
+            var data = _ref.data, rowHeight = _ref.rowHeight, renderRow = _ref.renderRow, _ref$overscanCount = _ref.overscanCount, overscanCount = void 0 === _ref$overscanCount ? 10 : _ref$overscanCount, props = (_ref.sync, 
+            babelHelpers.objectWithoutProperties(_ref, [ "data", "rowHeight", "renderRow", "overscanCount", "sync" ])), _ref2$offset = _ref2.offset, offset = void 0 === _ref2$offset ? 0 : _ref2$offset, _ref2$height = _ref2.height, height = void 0 === _ref2$height ? 0 : _ref2$height, start = offset / rowHeight | 0, visibleRowCount = height / rowHeight | 0;
+            overscanCount && (start = Math.max(0, start - start % overscanCount), visibleRowCount += overscanCount);
+            var end = start + 1 + visibleRowCount, selection = data.slice(start, end);
+            return preact.h("div", babelHelpers["extends"]({
+                onScroll: this.handleScroll
+            }, props), preact.h("div", {
+                style: STYLE_INNER + " height:" + data.length * rowHeight + "px;"
+            }, preact.h("div", {
+                style: STYLE_CONTENT + " top:" + start * rowHeight + "px;"
+            }, selection.map(renderRow))));
+        }, VirtualList;
+    }(preact.Component);
+    return VirtualList;
+});
+//# sourceMappingURL=preact-virtual-list.js.map
+},{"preact":"node_modules/preact/dist/preact.esm.js"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 function getBundleURLCached() {
   if (!bundleURL) {
@@ -1239,11 +1312,13 @@ var _linkstate = require('linkstate');
 
 var _linkstate2 = _interopRequireDefault(_linkstate);
 
+var _preactVirtualList = require('preact-virtual-list');
+
+var _preactVirtualList2 = _interopRequireDefault(_preactVirtualList);
+
 require('./style.scss');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1270,7 +1345,7 @@ var Line = function Line(_ref) {
 			null,
 			num
 		),
-		code
+		code.slice(0, 150)
 	);
 };
 
@@ -1301,22 +1376,21 @@ var Result = function (_Component) {
 		value: function render(_ref3, state) {
 			var _this2 = this;
 
-			var i = _ref3.i,
-			    file = _ref3.file,
+			var file = _ref3.file,
 			    lines = _ref3.lines,
-			    q = _ref3.q;
+			    q = _ref3.q,
+			    item = _ref3.item;
 
 			return (0, _preact.h)(
 				'div',
-				{ 'class': 'result' },
+				{ 'class': 'result', style: 'overflow:auto; height: 100px' },
 				(0, _preact.h)(
 					'h2',
 					null,
 					(0, _preact.h)(
 						'span',
 						null,
-						i,
-						'.'
+						item
 					),
 					' ',
 					file
@@ -1354,33 +1428,63 @@ var FileSearcher = function (_Component2) {
 			result: [],
 			opened: false,
 			total: 0
-		}, _this3.doSearch = function (event) {
+		}, _this3.items = [], _this3.doSearch = function (event) {
 			event.preventDefault();
 			var q = _this3.state.q;
 			if (q.indexOf(" ") !== -1) {
 				q = "%22" + q + "%22";
 			}
 
+			// Cleanup socket if running
+			if (_this3.socket) {
+				_this3.socket.close();
+			}
+
+			var counter = 1;
 			var url = "ws://localhost:8080/-/search?q=" + q;
-			var socket = new WebSocket(url);
+			_this3.socket = new WebSocket(url);
+			_this3.items = [];
 			_this3.setState({
 				opened: true,
-				result: []
+				result: [],
+				total: 0
 			});
-			socket.onmessage = function (_ref5) {
+			_this3.socket.onmessage = function (_ref5) {
 				var data = _ref5.data;
 
 				var obj = JSON.parse(data);
-				_this3.setState({
-					result: [obj].concat(_toConsumableArray(_this3.state.result)),
-					total: obj.found
-				});
+				obj.item = counter++;
+				_this3.items.push(obj);
 			};
-			socket.onclose = function (event) {
+			// debounce rendering on large datasets
+			_this3.inter = setInterval(function () {
+				_this3.setState({
+					result: _this3.items,
+					total: _this3.items.length
+				});
+			}, 1000);
+
+			_this3.socket.onclose = function (event) {
 				_this3.setState({ opened: false });
+				console.log('on socket close');
+				// delete this.socket.onmessage;
+				clearInterval(_this3.inter);
+				_this3.socket = undefined;
+				_this3.setState({
+					result: _this3.items,
+					total: _this3.items.length
+				});
 			};
 
 			return false;
+		}, _this3.clean = function (event) {
+			event.preventDefault();
+			_this3.close();
+		}, _this3.close = function () {
+			if (_this3.socket) {
+				_this3.socket.send('close');
+				_this3.socket.close();
+			}
 		}, _temp2), _possibleConstructorReturn(_this3, _ret2);
 	}
 
@@ -1403,11 +1507,19 @@ var FileSearcher = function (_Component2) {
 				(0, _preact.h)(
 					'form',
 					{ onSubmit: this.doSearch },
-					(0, _preact.h)('input', { type: 'text', onInput: (0, _linkstate2.default)(this, 'q') }),
+					(0, _preact.h)('input', { type: 'text',
+						onInput: (0, _linkstate2.default)(this, 'q'),
+						onFocus: this.clean
+					}),
 					(0, _preact.h)(
 						'button',
 						{ type: 'submit' },
 						'go!'
+					),
+					opened && (0, _preact.h)(
+						'button',
+						{ onClick: this.clean },
+						'X'
 					)
 				),
 				(0, _preact.h)(
@@ -1422,13 +1534,19 @@ var FileSearcher = function (_Component2) {
 					(0, _preact.h)('br', null),
 					'Total Results: ',
 					(0, _preact.h)(
-						'span',
+						'strong',
 						null,
 						total
-					)
+					),
+					opened && (0, _preact.h)('div', { className: 'spinner' })
 				),
-				result.length > 0 && result.map(function (obj, i) {
-					return (0, _preact.h)(Result, _extends({}, obj, { i: i, q: q }));
+				result.length > 0 && (0, _preact.h)(_preactVirtualList2.default, {
+					data: result,
+					renderRow: function renderRow(row) {
+						return (0, _preact.h)(Result, _extends({}, row, { q: q }));
+					},
+					rowHeight: 120,
+					overscanCount: 0
 				})
 			);
 		}
@@ -1440,7 +1558,7 @@ var FileSearcher = function (_Component2) {
 addEventListener('DOMContentLoaded', function () {
 	(0, _preact.render)((0, _preact.h)(FileSearcher, null), document.getElementById('main'));
 });
-},{"preact":"node_modules/preact/dist/preact.esm.js","linkstate":"node_modules/linkstate/dist/linkstate.es.js","./style.scss":"style.scss"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"preact":"node_modules/preact/dist/preact.esm.js","linkstate":"node_modules/linkstate/dist/linkstate.es.js","preact-virtual-list":"node_modules/preact-virtual-list/dist/preact-virtual-list.js","./style.scss":"style.scss"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -1469,7 +1587,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '35789' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '45357' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 

@@ -2,12 +2,19 @@
 from aiohttp import web
 from asyncio import subprocess
 from asyncio import create_subprocess_exec
+from asyncio import ensure_future
 from os.path import join
 from os.path import dirname
 
+import aiohttp
 import asyncio
 import os
 import json
+import logging
+
+
+logger = logging.getLogger('aiofsearch')
+
 
 _curr_path = os.getcwd()
 _empty = b'\n'
@@ -33,7 +40,12 @@ class Result:
         ))
 
     def add(self, line):
-        self.lines.append(line.decode('utf-8'))
+        try:
+            self.lines.append(line.decode('utf-8'))
+        except UnicodeDecodeError:
+            # ommit unicode errors
+            pass
+
 
 
 async def make_app():
@@ -54,24 +66,15 @@ async def open_file(request):
     file = request.query.get('f')
     line = request.query.get('l', '0')
     if file:
-        print(f'opened {_curr_path}{file}:{line}')
+        logger.info(f'opened {_curr_path}{file}:{line}')
         cmd = ["/usr/bin/subl", f'{_curr_path}{file}:{line}']
         await create_subprocess_exec(*cmd)
     return web.json_response(dict(result='ok'))
 
 
-async def search_files(request):
-    query = request.query.get('q', 'StreamResponse')
-    cmd = ["/usr/bin/ag", query, _curr_path, '--nocolor', '--group']
-    process = await create_subprocess_exec(
-        *cmd, stdout=subprocess.PIPE
-    )
-
-    ws = web.WebSocketResponse()
-    await ws.prepare(request)
+async def process_ws(ws, process): 
     result = None
     counter = 0
-
     while True:
         try:
             line = await process.stdout.readline()
@@ -89,8 +92,43 @@ async def search_files(request):
                 result = None
         else:
             await ws.close()
+            logger.debug('stop loop: no line')
             break
-    
+
+        if process.returncode:
+            logger.debug('stop loop: process exit')
+            break
+
+        if ws.closed:
+            logger.debug('stop loop: ws closed')
+            break
+
+
+async def search_files(request):
+    query = request.query.get('q', 'StreamResponse')
+    cmd = [
+        "/usr/bin/ag", query, _curr_path, '--nocolor', '--group',
+        "--ignore", "*.min*", "--ignore", "*.map*", "--ignore",
+        "*node_modules*", "--ignore", "*env*"
+    ]
+    process = await create_subprocess_exec(
+        *cmd, stdout=subprocess.PIPE
+    )
+
+    ws = web.WebSocketResponse()
+    await ws.prepare(request)
+    task = ensure_future(process_ws(ws, process))    
+    async for msg in ws:
+        if msg.type == aiohttp.WSMsgType.TEXT:
+            if msg.data == 'close':
+                logger.info('client had disconnected')
+                await ws.close()
+                process.kill()
+
+        elif msg.type == aiohttp.WSMsgType.ERROR:
+            logger.error('ws connection closed with exception %s' %
+                  ws.exception())
+
     return ws
 
 

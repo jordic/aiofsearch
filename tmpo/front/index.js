@@ -1,5 +1,6 @@
 import { h, render, Component } from 'preact';
 import linkState from 'linkstate';
+import VirtualList from 'preact-virtual-list'
 
 /** @jsx h */
 
@@ -11,7 +12,7 @@ const Line = ({line, open}) => {
 	let num = parts.shift()
 	let code = parts.join(":")
 	return (
-		<p onclick={() => open(num)}><span>{num}</span>{code}</p>
+		<p onclick={() => open(num)}><span>{num}</span>{code.slice(0,150)}</p>
 	)
 }
 
@@ -24,10 +25,10 @@ class Result extends Component {
 	}
 
 
-	render({i, file, lines, q}, state) {
+	render({file, lines, q, item}, state) {
 		return (
-			<div class="result">
-				<h2><span>{i}.</span> {file}</h2>
+			<div class="result" style="overflow:auto; height: 100px">
+				<h2><span>{item}</span> {file}</h2>
 				<pre>{lines.map(line => (
 					<Line line={line} q={q} open={this.openFile(file)} />
 				))}
@@ -48,6 +49,8 @@ class FileSearcher extends Component {
 		total: 0
 	};
 
+	items = []
+
 	doSearch = (event) => {
 		event.preventDefault();
 		let q = this.state.q;
@@ -55,41 +58,84 @@ class FileSearcher extends Component {
 			q = "%22" + q + "%22"
 		}
 
+		// Cleanup socket if running
+		if (this.socket) {
+			this.socket.close()
+		}
+
+		let counter = 1;
 		const url = "ws://localhost:8080/-/search?q=" + q
-		const socket = new WebSocket(url)
+		this.socket = new WebSocket(url)
+		this.items = []
 		this.setState({
 			opened:true,
-			result: []
+			result: [],
+			total: 0
 		})
-		socket.onmessage = ({data}) => {
+		this.socket.onmessage = ({data}) => {
 			const obj = JSON.parse(data);
-			this.setState({
-				result: [obj, ...this.state.result],
-				total: obj.found
-			})
+			obj.item = counter++;
+			this.items.push(obj)
 		}
-		socket.onclose = (event) => {
+		// debounce rendering on large datasets
+		this.inter = setInterval(() => {
+			this.setState({
+				result: this.items,
+				total: this.items.length
+			});
+		}, 1000);
+
+		this.socket.onclose = (event) => {
 			this.setState({opened:false})
+			console.log('on socket close')
+			// delete this.socket.onmessage;
+			clearInterval(this.inter);
+			this.socket = undefined;
+			this.setState({
+				result: this.items,
+				total: this.items.length
+			});
 		}
 
 		return false
 	}
+
+	clean = (event) => {
+		event.preventDefault();
+		this.close()
+	}
+
+	close = () => {
+		if (this.socket) {
+			this.socket.send('close');
+			this.socket.close()
+		}
+	}
+
 
 	render(props, {result, opened, total, q}) {
 		return (
 			<div className="filesearch">
 				<h1>Search files: </h1>
 				<form onSubmit={this.doSearch}>
-					<input type="text" onInput={linkState(this, 'q')} />
+					<input type="text" 
+						onInput={linkState(this, 'q')} 
+						onFocus={this.clean}
+						/>
 					<button type="submit">go!</button>
+					{opened && <button onClick={this.clean}>X</button> }
 				</form>
 				<div class="results">
 					WS is <span>{(opened) ? 'opened' : 'closed'}</span><br/>
-					Total Results: <span>{total}</span>
+					Total Results: <strong>{total}</strong>
+					{opened && <div className="spinner"></div>}
 				</div>
-				{result.length > 0 && result.map((obj, i) => 
-					( <Result {...obj} i={i} q={q} /> )
-				)}
+				{result.length > 0 && <VirtualList
+  					data={result}
+    				renderRow={ row => <Result {...row} q={q} /> }
+    				rowHeight={120}
+    				overscanCount={0}
+				/>}
 
 			</div>
 		)

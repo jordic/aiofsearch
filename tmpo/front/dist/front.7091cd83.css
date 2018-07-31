@@ -7,7 +7,7 @@ h1 {
   font-size: 2em; }
 
 .result {
-  margin-top: 30px; }
+  margin-top: 20px; }
   .result h2 {
     font-size: 1.2em;
     color: #666;
@@ -32,7 +32,7 @@ h1 {
       background-color: #fff; }
 
 h1 {
-  font-size: 2em; }
+  font-size: 1em; }
 
 form input {
   padding: 10px;
@@ -43,3 +43,27 @@ form button {
   margin-left: 10px;
   font-weight: bold;
   font-size: 1.5em; }
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg); } }
+
+.spinner:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  border-top-color: #333;
+  animation: spinner .6s linear infinite; }
+
+.spinner {
+  position: relative;
+  width: 40px;
+  margin-top: 20px; }
