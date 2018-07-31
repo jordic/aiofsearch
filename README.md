@@ -33,3 +33,8 @@ to open results with it.
 ## Todo
 
  - Add configuration params 
+
+
+## Screenshot
+
+![alt text](https://github.com/jordic/aiofsearch/raw/master/assets/screenshot.png "Screenshot")
