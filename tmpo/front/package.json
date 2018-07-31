@@ -1,0 +1,23 @@
+{
+  "name": "fsearch-aiohttp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel index.html",
+    "watch": "parcel watch index.html"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "linkstate": "^1.1.1",
+    "node-sass": "^4.9.2",
+    "preact": "^8.2.9"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-preact": "^1.1.0",
+    "parcel-bundler": "^1.9.7"
+  }
+}

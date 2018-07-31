@@ -1,0 +1,45 @@
+body {
+  font-family: Arial;
+  color: #666;
+  padding: 20px; }
+
+h1 {
+  font-size: 2em; }
+
+.result {
+  margin-top: 30px; }
+  .result h2 {
+    font-size: 1.2em;
+    color: #666;
+    font-weight: normal;
+    margin-bottom: 3px; }
+    .result h2 span {
+      font-weight: bold; }
+  .result pre {
+    margin-top: 0px;
+    background-color: #eee;
+    padding: 2px; }
+    .result pre span {
+      display: inline-block;
+      width: 50px;
+      padding-right: 20px;
+      text-align: right;
+      font-weight: bold; }
+    .result pre p {
+      border-bottom: 1px solid #bbb;
+      cursor: pointer; }
+    .result pre p:hover {
+      background-color: #fff; }
+
+h1 {
+  font-size: 2em; }
+
+form input {
+  padding: 10px;
+  font-size: 1.5em; }
+
+form button {
+  padding: 10px;
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 1.5em; }

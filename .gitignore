@@ -18,6 +18,7 @@ lib/
 lib64/
 parts/
 sdist/
+env/
 var/
 wheels/
 *.egg-info/
@@ -102,3 +103,5 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+node_modules/
