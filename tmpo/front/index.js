@@ -1,6 +1,7 @@
 import { h, render, Component } from 'preact';
 import linkState from 'linkstate';
-import VirtualList from 'preact-virtual-list'
+// import VirtualList from 'preact-virtual-list'
+import ScrollViewport from 'preact-scroll-viewport';
 
 /** @jsx h */
 
@@ -27,9 +28,9 @@ class Result extends Component {
 
 	render({file, lines, q, item}, state) {
 		return (
-			<div class="result" style="overflow:auto; height: 100px">
+			<div class="result" style="overflow:hidden;" key={item}>
 				<h2><span>{item}</span> {file}</h2>
-				<pre>{lines.map(line => (
+				<pre>{lines.slice(0, 10).map(line => (
 					<Line line={line} q={q} open={this.openFile(file)} />
 				))}
 				</pre>
@@ -58,6 +59,7 @@ class FileSearcher extends Component {
 			q = "%22" + q + "%22"
 		}
 
+		this.rinput.blur()
 		// Cleanup socket if running
 		if (this.socket) {
 			this.socket.close()
@@ -100,6 +102,13 @@ class FileSearcher extends Component {
 		return false
 	}
 
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextState.q != this.state.q) {
+			return false;
+		}
+		return true;
+	}
+
 	clean = (event) => {
 		event.preventDefault();
 		this.close()
@@ -121,6 +130,7 @@ class FileSearcher extends Component {
 					<input type="text" 
 						onInput={linkState(this, 'q')} 
 						onFocus={this.clean}
+						ref={el => this.rinput = el}
 						/>
 					<button type="submit">go!</button>
 					{opened && <button onClick={this.clean}>X</button> }
@@ -130,12 +140,11 @@ class FileSearcher extends Component {
 					Total Results: <strong>{total}</strong>
 					{opened && <div className="spinner"></div>}
 				</div>
-				{result.length > 0 && <VirtualList
-  					data={result}
-    				renderRow={ row => <Result {...row} q={q} /> }
-    				rowHeight={120}
-    				overscanCount={0}
-				/>}
+				{result.length > 0 && 
+					<ScrollViewport defaultRowHeight={120}>
+						{result.map(row => ( <Result {...row} q={q} /> ))}
+					</ScrollViewport>	
+				}
 
 			</div>
 		)

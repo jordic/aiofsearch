@@ -9,7 +9,7 @@ readme = open('README.md').read() + '\n'
 
 setup(
     name='aiofilesearch',
-    version="1.0.0",
+    version="1.0.1",
     description='WS Demo for file search',
     long_description=readme,
     author='Jordi Collell',
