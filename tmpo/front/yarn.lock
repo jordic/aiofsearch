@@ -2785,8 +2785,8 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
 lodash@^4.0.0, lodash@^4.17.4, lodash@~4.17.10:
-  version "4.17.10"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
 
 log-symbols@^2.2.0:
   version "2.2.0"
@@ -3950,10 +3950,6 @@ posthtml@^0.11.2, posthtml@^0.11.3:
 preact-scroll-viewport@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preact-scroll-viewport/-/preact-scroll-viewport-0.2.0.tgz#7c5c86dd9cb02c6b23d6b37834c08620a63068dc"
-
-preact-virtual-list@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/preact-virtual-list/-/preact-virtual-list-0.3.1.tgz#90977c1d81cebe10b38817c103a8fb3fc8279297"
 
 preact@^8.2.9:
   version "8.2.9"
