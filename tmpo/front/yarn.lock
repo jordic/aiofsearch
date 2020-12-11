@@ -2380,8 +2380,8 @@ inherits@2.0.1:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.1.tgz#b17d08d326b4423e568eff719f91b0b1cbdf69f1"
 
 ini@^1.3.4, ini@~1.3.0:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.7.tgz#a09363e1911972ea16d7a8851005d84cf09a9a84"
 
 invariant@^2.2.2:
   version "2.2.4"
@@ -3950,10 +3950,6 @@ posthtml@^0.11.2, posthtml@^0.11.3:
 preact-scroll-viewport@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preact-scroll-viewport/-/preact-scroll-viewport-0.2.0.tgz#7c5c86dd9cb02c6b23d6b37834c08620a63068dc"
-
-preact-virtual-list@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/preact-virtual-list/-/preact-virtual-list-0.3.1.tgz#90977c1d81cebe10b38817c103a8fb3fc8279297"
 
 preact@^8.2.9:
   version "8.2.9"
