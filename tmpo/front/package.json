@@ -13,7 +13,7 @@
   "dependencies": {
     "babel-preset-stage-0": "^6.24.1",
     "linkstate": "^1.1.1",
-    "node-sass": "^4.9.2",
+    "node-sass": "^7.0.0",
     "preact": "^8.2.9",
     "preact-scroll-viewport": "^0.2.0"
   },
