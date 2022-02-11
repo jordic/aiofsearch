@@ -1131,8 +1131,8 @@ chokidar@^2.0.3:
     fsevents "^1.2.2"
 
 chownr@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.0.1.tgz#e2a75042a9551908bebd25b8523d5f9769d79181"
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.4.tgz#6fc9d7b42d32a583596337666e7d08084da2cc6b"
 
 cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
   version "1.0.4"
@@ -3950,10 +3950,6 @@ posthtml@^0.11.2, posthtml@^0.11.3:
 preact-scroll-viewport@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preact-scroll-viewport/-/preact-scroll-viewport-0.2.0.tgz#7c5c86dd9cb02c6b23d6b37834c08620a63068dc"
-
-preact-virtual-list@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/preact-virtual-list/-/preact-virtual-list-0.3.1.tgz#90977c1d81cebe10b38817c103a8fb3fc8279297"
 
 preact@^8.2.9:
   version "8.2.9"
